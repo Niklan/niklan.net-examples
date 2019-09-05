@@ -1,0 +1,17 @@
+services:
+  example.main_content_renderer.dirty_json:
+    class: Drupal\example\Render\MainContent\DirtyJsonRenderer
+    arguments: ['@renderer', '@title_resolver']
+    tags:
+      - { name: render.main_content_renderer, format: dirty_json }
+
+  example.page_display_variant_subscriber:
+    class: Drupal\example\EventSubscriber\PageDisplayVariantSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  example.full_markup_page_subscriber:
+    class: Drupal\example\EventSubscriber\FullMarkupPageSubscriber
+    arguments: ['@current_route_match']
+    tags:
+      - { name: event_subscriber }
