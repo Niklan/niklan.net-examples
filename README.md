@@ -1,2 +1,3 @@
-# niklan.net-examples
-The examples from niklan.net blog articles.
+# niklan.net examples
+
+This repository contains examples from niklan.net website.
