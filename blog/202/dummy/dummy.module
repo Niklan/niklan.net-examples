@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Dummy module.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_display_build_alter().
+ */
+function dummy_entity_display_build_alter(&$build, $context) {
+  $entity = $context['entity'];
+
+  // Check is current entity is node.
+  if ($entity instanceof NodeInterface && $entity->bundle() == 'article') {
+    $is_body_field_exists = $entity->hasField('body') && !empty($build['body']);
+    $is_tags_field_exists = $entity->hasField('field_tags');
+    $fields_exists = $is_body_field_exists && $is_tags_field_exists;
+
+    // Only if both fields is exists and body field is empty, we continue to
+    // process.
+    if ($fields_exists && $entity->get('body')->isEmpty()) {
+      // Default value for description;
+      $description = NULL;
+      // Loop over all tags and looking for first term with description.
+      foreach ($entity->get('field_tags') as $item) {
+        // "field_tags" is entity reference so we get entity from it.
+        /** @var \Drupal\taxonomy\TermInterface $term */
+        $term = $item->entity;
+
+        if (!$term->get('description')->isEmpty()) {
+          $description = $term->get('description')->view();
+
+          $build['body']['#cache']['tags'] = Cache::mergeTags(
+            $build['body']['#cache']['tags'],
+            $term->getCacheTags()
+          );
+
+          break;
+        }
+      }
+
+      if ($description) {
+        $build['body'] = [
+          '#theme' => 'field',
+          '#title' => '',
+          '#label_display' => 'hidden',
+          '#view_mode' => $context['view_mode'],
+          '#language' => $entity->get('body')->getLangcode(),
+          '#field_name' => 'field_paragraphs',
+          '#field_type' => 'string',
+          '#field_translatable' => FALSE,
+          '#entity_type' => $entity->getEntityTypeId(),
+          '#bundle' => $entity->bundle(),
+          '#object' => $entity,
+          '#is_multiple' => FALSE,
+          // Use simple formatter.
+          '#formatter' => 'string',
+          '0' => $description,
+        ] + $build['body'];
+      }
+    }
+  }
+}

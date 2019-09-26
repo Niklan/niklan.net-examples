@@ -1,0 +1,7 @@
+dummy.batch:
+  path: '/admin/config/content/dummy-batch'
+  defaults:
+    _title: 'Dummy batch'
+    _form: 'Drupal\dummy\Form\BatchForm'
+  requirements:
+    _permission: 'administer site configuration'

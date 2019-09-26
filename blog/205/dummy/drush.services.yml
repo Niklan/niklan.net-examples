@@ -1,0 +1,10 @@
+services:
+  dummy.hello_world_generator:
+    class: Drupal\dummy\Generators\HelloWorldGenerator
+    tags:
+      - { name: drush.generator }
+
+  dummy.deriver_generator:
+    class: Drupal\dummy\Generators\DeriverGenerator
+    tags:
+      - { name: drush.generator }

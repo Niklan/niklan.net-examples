@@ -1,0 +1,13 @@
+services:
+  dummy.message_collector:
+    class: 'Drupal\dummy\Service\MessageServiceManager'
+    tags:
+      - { name: service_collector, tag: dummy_messages, call: addService }
+  dummy.message_service_first:
+    class: 'Drupal\dummy\Service\MessageServiceFirst'
+    tags:
+      - { name: dummy_messages, priority: -10 }
+  dummy.message_service_second:
+    class: 'Drupal\dummy\Service\MessageServiceSecond'
+    tags:
+      - { name: dummy_messages }

@@ -1,0 +1,90 @@
+<?php
+
+use Drupal\node\NodeInterface;
+
+/**
+ * @file
+ * Main file for custom hooks and functions.
+ */
+
+/**
+ * Trying to find next node of the same type.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   A current node object.
+ *
+ * @return \Drupal\node\NodeInterface|null
+ *   Next node object or NULL if not found.
+ */
+function _dummy_find_next_node(NodeInterface $node) {
+  $result = &drupal_static(__FUNCTION__ . $node->id());
+
+  if (!isset($result)) {
+    $result = NULL;
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $next_nid = $node_storage->getQuery()
+      ->condition('type', $node->bundle())
+      ->condition('created', $node->getCreatedTime(), '>')
+      ->range(0, 1)
+      ->sort('created', 'ASC')
+      ->execute();
+
+    if (count($next_nid) && $next_node = $node_storage->load(reset($next_nid))) {
+      $result = $next_node;
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Trying to find previous node of the same type.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   A current node object.
+ *
+ * @return \Drupal\node\NodeInterface|null
+ *   Previous node object or NULL if not found.
+ */
+function _dummy_find_previous_node(NodeInterface $node) {
+  $result = &drupal_static(__FUNCTION__ . $node->id());
+
+  if (!isset($result)) {
+    $result = NULL;
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    $prev_nid = $node_storage->getQuery()
+      ->condition('type', $node->bundle())
+      ->condition('created', $node->getCreatedTime(), '<')
+      ->range(0, 1)
+      ->sort('created', 'DESC')
+      ->execute();
+
+    if (count($prev_nid) && $prev_node = $node_storage->load(reset($prev_nid))) {
+      $result = $prev_node;
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Load random node.
+ *
+ * @return \Drupal\node\NodeInterface
+ *   A node object of random node.
+ */
+function _dummy_random_node() {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $query = \Drupal::database()->select('node_field_data', 'n');
+  $query->addField('n', 'nid');
+  $query->condition('n.status', NodeInterface::PUBLISHED)
+    ->range(0, 1)
+    ->orderRandom();
+
+  $nid = $query->execute()->fetchField();
+
+  return $node_storage->load($nid);
+}

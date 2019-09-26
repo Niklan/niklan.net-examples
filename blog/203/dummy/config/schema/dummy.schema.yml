@@ -1,0 +1,7 @@
+block.settings.dummy_last_content:
+  type: block_settings
+  label: 'Last content. block'
+  mapping:
+    limit:
+      type: integer
+      label: The max amount of links to display.

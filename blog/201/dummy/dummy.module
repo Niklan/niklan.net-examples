@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Dummy module.
+ */
+
+use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\ProfileForm;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for user.
+ */
+function dummy_user_insert(EntityInterface $entity) {
+  $user_data = Drupal::service('user.data');
+
+  $api_key = Crypt::randomBytesBase64(16);
+  $api_secret = Crypt::randomBytesBase64(16);
+
+  $user_data->set('dummy', $entity->id(), 'api_key', $api_key);
+  $user_data->set('dummy', $entity->id(), 'api_secret', $api_secret);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dummy_form_user_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $profile = $form_state->getFormObject();
+
+  if ($profile instanceof ProfileForm) {
+    $user_data = Drupal::service('user.data');
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $profile->getEntity();
+
+    $form['dummy_api'] = [
+      '#type' => 'fieldset',
+      '#title' => 'API',
+    ];
+
+    $form['dummy_api']['key'] = [
+      '#type' => 'item',
+      '#title' => 'Key',
+      '#markup' => $user_data->get('dummy', $user->id(), 'api_key'),
+    ];
+
+    $form['dummy_api']['secret'] = [
+      '#type' => 'item',
+      '#title' => 'Secret',
+      '#markup' => $user_data->get('dummy', $user->id(), 'api_secret'),
+    ];
+  }
+}

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Dummy module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function dummy_preprocess_page(&$variables) {
+  $messenger = \Drupal::messenger();
+  /** @var \Drupal\dummy\Service\MessageServiceManager $messages_manager */
+  $messages_manager = \Drupal::service('dummy.message_collector');
+  foreach ($messages_manager->getMessages() as $message) {
+    $messenger->addMessage($message['message'], $message['type']);
+  }
+}

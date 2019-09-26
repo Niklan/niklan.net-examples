@@ -1,0 +1,56 @@
+<?php
+
+namespace Drupal\{{ name }}\Plugin\Derivative;
+
+use Drupal\Component\Plugin\Derivative\DeriverBase;
+{% if dependency_injection %}
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+{% endif %}
+
+/**
+ * Class {{ class_name }}.
+ *
+ * @package Drupal\{{ name }}\Deriver
+ */
+class {{ class_name }} extends DeriverBase{% if dependency_injection %} implements ContainerDeriverInterface{% endif %} {
+
+{% if dependency_injection %}
+  /**
+   * The logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * {{ class_name }} constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelInterface
+   *   The logger channel.
+   */
+  public function __construct(LoggerChannelInterface $logger) {
+    $this->logger = $logger;
+  }
+
+  /**
+  * {@inheritdoc}
+  */
+  public static function create(ContainerInterface $container, $base_plugin_id) {
+    return new static(
+      $container->get('logger.factory')->get('{{ name }}'),
+    );
+  }
+{% endif %}
+  /**
+   * {@inheritdoc}
+   */
+  public function getDerivativeDefinitions($base_plugin_definition) {
+    $this->derivatives['derivative_id'] = $base_plugin_definition;
+    $this->derivatives['derivative_id']['annotation_key'] = 'Annotation value';
+
+    return $this->derivatives;
+  }
+
+}

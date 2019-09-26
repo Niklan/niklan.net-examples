@@ -1,0 +1,5 @@
+name: Dummy
+type: module
+description: 'EntityReferenceSelection example'
+package: Custom
+core: 8.x

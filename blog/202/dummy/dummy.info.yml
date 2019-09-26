@@ -1,0 +1,5 @@
+name: Dummy
+type: module
+description: Default field value.
+package: Custom
+core: 8.x

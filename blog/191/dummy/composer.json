@@ -1,0 +1,9 @@
+{
+  "name": "drupal/dummy",
+  "type": "drupal-custom-module",
+  "description": "Custom token examples",
+  "keywords": ["Drupal"],
+  "require": {
+    "drupal/token": "^1.3"
+  }
+}

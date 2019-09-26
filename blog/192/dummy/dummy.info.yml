@@ -1,0 +1,4 @@
+name: Dummy
+description: Custom Batch API examples.
+type: module
+core: 8.x

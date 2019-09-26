@@ -1,0 +1,5 @@
+name: Dummy
+type: module
+description: Derivatives examples.
+package: Custom
+core: 8.x
