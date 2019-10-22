@@ -1,0 +1,15 @@
+services:
+  logger.channel.example:
+    parent: logger.channel_base
+    arguments: ['example']
+
+  example.config_save_subscriber:
+    class: Drupal\example\EventSubscriber\ConfigSaveSubscriber
+    arguments: ['@logger.channel.example', '@current_user', '@diff.formatter', '@renderer']
+    tags:
+      - { name: event_subscriber }
+
+  example.hello_world_controller_subscriber:
+    class: Drupal\example\EventSubscriber\HelloWorldControllerSubscruber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,5 @@
+name: Example
+type: module
+description: 'Drupal 8 Events example.'
+package: Custom
+core: 8.x
