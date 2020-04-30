@@ -1,0 +1,4 @@
+services:
+  example.big_file_generator:
+    class: Drupal\example\BigFileGenerator
+    arguments: ['@file_system']

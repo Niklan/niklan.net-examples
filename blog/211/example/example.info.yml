@@ -1,0 +1,5 @@
+name: Example
+type: module
+description: The examples for lock service.
+package: Custom
+core_version_requirement: ^8.8 || ^9

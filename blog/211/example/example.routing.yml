@@ -1,0 +1,15 @@
+example.controller:
+  path: '/example-controller'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\example\Controller\ExampleController::build'
+  requirements:
+    _permission: 'access content'
+
+example.form:
+  path: '/example-form'
+  defaults:
+    _title: 'Form example with locking mechanism'
+    _form: 'Drupal\example\Form\ExampleForm'
+  requirements:
+    _permission: 'access content'
