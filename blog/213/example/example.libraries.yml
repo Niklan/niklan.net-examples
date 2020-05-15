@@ -1,0 +1,7 @@
+ajax-placeholder:
+  version: VERSION
+  js:
+    js/ajax-placeholder.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.ajax

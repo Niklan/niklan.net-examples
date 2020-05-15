@@ -1,0 +1,17 @@
+example.ajax_processor:
+  path: /ajax-placeholder-processor
+  defaults:
+    _controller: \Drupal\example\Controller\AjaxPlaceholderController::process
+  options:
+    no_cache: TRUE
+  requirements:
+    _access: 'TRUE'
+
+example.ajax_nojs:
+  path: /ajax-placeholder-nojs
+  defaults:
+    _controller: \Drupal\example\Controller\AjaxPlaceholderController::noJsCookie
+  options:
+    no_cache: TRUE
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Provides custom hook implementations.
+ */
+
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Url;
+use Drupal\example\Render\Placeholder\AjaxPlaceholderStrategy;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function example_page_attachments(array &$attachments) {
+  $attachments['#cache']['contexts'][] = 'cookies:' . AjaxPlaceholderStrategy::NOJS_COOKIE;
+
+  $request = Drupal::request();
+  $has_nojs_cookie = $request->cookies->has(AjaxPlaceholderStrategy::NOJS_COOKIE);
+
+  if (!$has_nojs_cookie) {
+    // When user has nojs cookie, we add special metatag which will be executed
+    // by browser if JavaScript support is disabled. This will redirect user to
+    // the special page which will put this cookie. The cookie will mark for us
+    // that JS is not enabled and prevent from infinity redirect loop here.
+    // @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+    // @see \Drupal\example\Controller\AjaxPlaceholderController::noJsCookie
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#tag' => 'meta',
+        '#noscript' => TRUE,
+        '#attributes' => [
+          'http-equiv' => 'Refresh',
+          'content' => '0; URL=' . Url::fromRoute('example.ajax_nojs', [], ['query' => Drupal::service('redirect.destination')->getAsArray()])->toString(),
+        ],
+      ],
+      'example_ajax_nojs',
+    ];
+  }
+  else {
+    // If JavaScript is enabled and cookie is set, force delete it.
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => 'document.cookie = "' . AjaxPlaceholderStrategy::NOJS_COOKIE . '=1; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"',
+      ],
+      'example_ajax_nojs',
+    ];
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter() for 'example_random'.
+ */
+function example_query_example_random_alter(AlterableInterface $query) {
+  $query->orderRandom();
+}

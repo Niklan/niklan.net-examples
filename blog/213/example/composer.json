@@ -1,0 +1,11 @@
+{
+    "name": "niklan/example",
+    "type": "drupal-custom-module",
+    "description": "The examples for placeholder strategy.",
+    "keywords": [
+        "Drupal"
+    ],
+    "require": {
+        "php": ">=7.3"
+    }
+}

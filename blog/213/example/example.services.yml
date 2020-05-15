@@ -1,0 +1,10 @@
+services:
+  placeholder_strategy.ajax_example:
+    class: Drupal\example\Render\Placeholder\AjaxPlaceholderStrategy
+    arguments: ['@request_stack']
+    tags:
+      - { name: placeholder_strategy }
+
+  example.slow_block_lazy_builder:
+    class: Drupal\example\SlowBlockLazyBuilder
+    arguments: ['@entity_type.manager']

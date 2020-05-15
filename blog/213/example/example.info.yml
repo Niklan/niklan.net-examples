@@ -1,0 +1,5 @@
+name: Example
+type: module
+description: The examples for placeholder strategy.
+package: Custom
+core_version_requirement: ^8.8 || ^9
