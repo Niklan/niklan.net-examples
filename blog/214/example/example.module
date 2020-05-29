@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Provides custom hook implementations.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_mail().
+ *
+ * @see \Drupal\example\Mail\MailHandler
+ */
+function example_mail(string $key, array &$message, array $params): void {
+  /** @var \Drupal\Core\Render\RendererInterface $renderer */
+  $renderer = \Drupal::service('renderer');
+
+  if (isset($params['headers'])) {
+    $message['headers'] = array_merge($message['headers'], $params['headers']);
+  }
+  if (!empty($params['from'])) {
+    $message['from'] = $params['from'];
+  }
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $renderer->renderPlain($params['body']);
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function example_user_login(UserInterface $account) {
+  /** @var \Drupal\example\Mail\UserLoginEmail $login_mail */
+  $login_mail = \Drupal::service('example.user_login_mail');
+  $login_mail->send($account);
+}

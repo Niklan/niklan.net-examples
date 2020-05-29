@@ -1,0 +1,8 @@
+services:
+    example.mail_handler:
+    class: Drupal\example\Mail\MailHandler
+    arguments: ['@plugin.manager.mail', '@language_manager', '@language.default', '@string_translation']
+
+  example.user_login_mail:
+    class: Drupal\example\Mail\UserLoginMail
+    arguments: ['@example.mail_handler', '@request_stack', '@config.factory']

@@ -2,6 +2,7 @@
 
 _Newer first._
 
+- [Drupal 8, 9: Sending mails using OOP and Dependency Injection](214)
 - [Drupal 8, 9: Placeholder Strategy](213)
 - [Drupal 8, 9:lock and lock.persistent — state lock](211)
 - [Drupal 8: Preparing a response for the main content](208)
