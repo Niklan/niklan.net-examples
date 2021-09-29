@@ -1,0 +1,6 @@
+name: Example with Warmer
+description: Module that provides warmer plugin example.
+type: module
+core_version_requirement: ^9.0
+dependencies:
+  - warmer:warmer
